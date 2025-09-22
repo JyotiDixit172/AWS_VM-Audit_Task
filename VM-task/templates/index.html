@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AWS EC2 Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #121212; color: white; zoom: 80%; }
+        .container { margin-top: 40px; max-width: 900px; }
+        .card { background-color: #1e1e1e; border-radius: 15px; padding: 25px; color : #fff}
+        h1 { font-weight: bold; }
+        h4 { margin-top: 20px; color: #ffcc00; }
+        input, select { background-color:#2a2a2a !important; color: white !important; border: 1px solid #444 !important; }
+         ::placeholder { color: #ffffff !important; opacity: 1; }
+    :-ms-input-placeholder { color: #ffffff !important; }
+    ::-ms-input-placeholder { color: #ffffff !important; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center mb-4">AWS EC2 Manager 🌌</h1>
+    
+    <div class="card">
+        <form method="POST">
+            <h4>⚙️ Instance Specs</h4>
+            <div class="mb-3"><label>Instance Name</label><input type="text" name="instance_name" class="form-control" placeholder="Instance Name"></div>
+            <div class="mb-3">
+                <label>Instance Type</label>
+                <select name="instance_type" class="form-control" >
+                    <option value="">Select Instance Type</option>
+                    <option value="t3.micro">t3.micro (✅ Free Tier eligible, UEFI supported)</option>
+                    <option value="t3.small">t3.small (Paid)</option>
+                    <option value="t3.medium">t3.medium (Paid)</option>
+                    <option value="t2.small">t2.small (Paid, BIOS only)</option>
+                    <option value="t2.medium">t2.medium (Paid, BIOS only)</option>
+                </select>
+            </div>
+            <div class="mb-3"><label>AMI ID</label><input type="text" name="ami_id" class="form-control" placeholder="AMI ID (e.g. ami-12345678)" required></div>
+            <div class="mb-3"><label>Key Pair Name</label><input type="text" name="key_name" class="form-control" placeholder="Existing or New Key Pair"></div>
+            <div class="mb-3"><label>Security Group ID</label><input type="text" name="security_group" class="form-control" placeholder="Security Group ID"></div>
+
+            <h4>🖥 Instance Control</h4>
+            <div class="mb-3"><label>Instance ID</label><input type="text" name="instance_id" class="form-control" placeholder="Instance ID (for terminate)"></div>
+
+            <button type="submit" name="action" value="create" class="btn btn-success">✨ Create Instance</button>
+            <button type="submit" name="action" value="destroy" class="btn btn-danger">🗑 Destroy Instance</button>
+        </form>
+    </div>
+
+    {% if message %}
+    <div class="alert alert-info mt-3">{{ message }}</div>
+    {% endif %}
+    {% if instance_info %}
+    <div class="card mt-3">
+        <h4>📊 Instance Details</h4>
+        <p><b>Instance ID:</b> {{ instance_info.id }}</p>
+        <p><b>Instance Name:</b> {{ instance_info.name }}</p>
+        <p><b>State:</b> {{ instance_info.state }}</p>
+        <p><b>Public IP:</b> {{ instance_info.public_ip }}</p>
+        <p><b>AWS Console:</b> <a href="{{ instance_info.url }}" target="_blank">View in Console</a></p>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
